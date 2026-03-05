@@ -1,4 +1,5 @@
-
+## URL 
+https://job-seeker-frontend-git-main-cvm010s-projects.vercel.app/
 
 ## 🏗️ Architecture
 
