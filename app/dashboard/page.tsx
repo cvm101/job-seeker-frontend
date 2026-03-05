@@ -21,6 +21,9 @@ export default function Dashboard() {
     const [matches, setMatches] = useState<any[]>([]);
     const [loadingMatches, setLoadingMatches] = useState(true);
 
+    // 🚀 NEW: State for our loading button
+    const [triggering, setTriggering] = useState(false);
+
     useEffect(() => {
         const checkUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
@@ -87,6 +90,27 @@ export default function Dashboard() {
         setLoading(false);
     };
 
+    // 🚀 NEW: The secure function that calls your Next.js API route
+    const triggerGitHubAction = async () => {
+        setTriggering(true);
+        try {
+            // This calls the /api/trigger/route.ts file we made!
+            const response = await fetch('/api/trigger', {
+                method: "POST",
+            });
+
+            if (response.ok) {
+                alert("🚀 Engine Triggered! The AI is hunting for jobs. Give it a minute and refresh the page.");
+            } else {
+                alert("Failed to trigger engine. Check server logs.");
+            }
+        } catch (error) {
+            console.error("Error triggering action:", error);
+            alert("Something went wrong triggering the action.");
+        }
+        setTriggering(false);
+    };
+
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
         alert("Cover letter copied! Ready to paste.");
@@ -139,15 +163,26 @@ export default function Dashboard() {
 
                 {/* RIGHT COLUMN: Job Feed */}
                 <div className="md:col-span-2">
-                    <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-                        <span>🔥</span> Your Job Matches
-                    </h2>
+
+                    {/* 🚀 NEW: The Header now includes the Trigger Button */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                        <h2 className="text-3xl font-bold flex items-center gap-3">
+                            <span>🔥</span> Your Job Matches
+                        </h2>
+                        <button
+                            onClick={triggerGitHubAction}
+                            disabled={triggering}
+                            className="bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition shadow-lg border border-purple-500 disabled:opacity-50"
+                        >
+                            {triggering ? "Waking up AI..." : "⚡ Run Engine Now"}
+                        </button>
+                    </div>
 
                     {loadingMatches ? (
                         <div className="text-gray-400 animate-pulse">Consulting the AI Engine...</div>
                     ) : matches.length === 0 ? (
                         <div className="bg-gray-800 p-8 rounded-xl text-center text-gray-400 border border-dashed border-gray-600">
-                            No matches yet! Make sure your GitHub Action has run.
+                            No matches yet! Click "Run Engine Now" to start hunting.
                         </div>
                     ) : (
                         <div className="space-y-6">
@@ -159,8 +194,8 @@ export default function Dashboard() {
                                             <p className="text-blue-400 font-semibold text-lg">{job.company_name}</p>
                                         </div>
                                         <span className="bg-green-900/50 text-green-400 px-3 py-1 rounded-full text-sm font-bold border border-green-800">
-                      {job.match_score}% Match
-                    </span>
+                                            {job.match_score}% Match
+                                        </span>
                                     </div>
 
                                     <div className="mb-4">
