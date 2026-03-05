@@ -1,18 +1,4 @@
----
 
-# 🚀 JobHunter Engine
-
-**JobHunter Engine** is an automated, AI-powered job search assistant. It combines a Next.js frontend dashboard with a secure backend engine powered by GitHub Actions. Users can input their skills, experience, and cover letter templates to automatically scrape, match, and generate tailored applications for highly relevant jobs.
-
-## ✨ Key Features
-
-* **⚡ Hybrid Execution:** Runs automatically on a daily schedule (Cron) or on-demand via a secure Next.js API trigger.
-* **🧠 AI-Powered Matching:** Analyzes job descriptions against user profiles to generate a "Match Score."
-* **📝 Auto-Cover Letters:** Generates customized, ready-to-copy cover letters based on the user's saved templates and the specific job requirements.
-* **🔒 Secure Architecture:** Utilizes server-side Next.js API routes to securely interact with the GitHub API without exposing authentication tokens to the client browser.
-* **📊 Real-time Dashboard:** Built with React and Tailwind CSS, providing a sleek interface to update user profiles, view job matches, and apply directly.
-
----
 
 ## 🏗️ Architecture
 
